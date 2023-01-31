@@ -53,8 +53,11 @@ void DataVisualizer::takeData(QMap<QString, QVector<double> > &data)
     /* Depending on the voltage level, display the battery status. */
     double lastBatteryVoltage = batteryVoltage.constLast();
     if (lastBatteryVoltage <= BATTERY_VERY_LOW)
+    {
         ui->batteryStatus->setText("CRITICAL! " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
-    else if (lastBatteryVoltage <= BATTERY_LOW)
+        QMessageBox::information(this, "Battery Status", "Battery voltage level is critical!");
+    }
+            else if (lastBatteryVoltage <= BATTERY_LOW)
         ui->batteryStatus->setText("LOW " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
     else if (lastBatteryVoltage <= BATTERY_MEDIUM)
         ui->batteryStatus->setText("MEDIUM " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
