@@ -57,16 +57,18 @@ void DataVisualizer::takeData(QMap<QString, QVector<double> > &data)
         ui->batteryStatus->setText("CRITICAL! " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
         QMessageBox::information(this, "Battery Status", "Battery voltage level is critical!");
     }
-            else if (lastBatteryVoltage <= BATTERY_LOW)
+    else if (lastBatteryVoltage <= BATTERY_LOW)
         ui->batteryStatus->setText("LOW " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
     else if (lastBatteryVoltage <= BATTERY_MEDIUM)
         ui->batteryStatus->setText("MEDIUM " + QString::number(lastBatteryVoltage, 'f', 2) + " V");
     else
         ui->batteryStatus->setText("HIGH (" + QString::number(lastBatteryVoltage, 'f', 2) + " V)");
 
+    ui->latestMeasurement->setText(QDateTime::fromTime_t(time.constLast()).toString("dd/MM/yyyy hh:mm:ss"));
+
     QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
     ui->customPlot->xAxis->setTicker(dateTimeTicker);
-    dateTimeTicker->setDateTimeFormat("d. MMM\nyyyy");
+    dateTimeTicker->setDateTimeFormat("dd.MM.yyyy");
 
     printData(onGraph);
 }
