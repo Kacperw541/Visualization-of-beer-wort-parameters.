@@ -84,8 +84,13 @@ bool DatabaseHandler::parseResponse(const QByteArray &response)
             QJsonObject param_obj = jsonObject.value(param).toObject();
             QVector <double> values;
             foreach(const QString& key, param_obj.keys())
+            {
                 values << param_obj.value(key).toDouble();
 
+                /*When the device cannot retrieve the time, it sends 0. In this case, calculate the time based on the last two correct values.*/
+                if ((param == "time") && ((values.last() <= 0) && (values.size() > 3)))
+                    values.last() = values.value(values.size() - 2) + (values.value(values.size() - 2) - values.value(values.size() - 3));
+            }
             data.insert(param, values);
         }
         emit dataReady(data);
