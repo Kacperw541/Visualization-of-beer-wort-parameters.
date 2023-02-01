@@ -64,9 +64,13 @@ void DataVisualizer::takeData(QMap<QString, QVector<double> > &data)
     else
         ui->batteryStatus->setText("HIGH (" + QString::number(lastBatteryVoltage, 'f', 2) + " V)");
 
-    ui->latestMeasurement->setText(QDateTime::fromTime_t(time.constLast()).toString("dd/MM/yyyy hh:mm:ss"));
+    QDateTime date;
+    date.setTimeZone(QTimeZone::utc());
+    date.setTime_t((time.constLast()));
+    ui->latestMeasurement->setText(date.toString("dd/MM/yyyy hh:mm:ss"));
 
     QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
+    dateTimeTicker->setTimeZone(QTimeZone::utc());
     ui->customPlot->xAxis->setTicker(dateTimeTicker);
     dateTimeTicker->setDateTimeFormat("dd.MM.yyyy");
 
